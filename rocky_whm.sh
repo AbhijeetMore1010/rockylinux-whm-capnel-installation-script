@@ -35,13 +35,6 @@ resolve_error() {
     local error_message="$1"
     
     # Add logic here to resolve specific errors automatically if possible
-    # For example:
-    # if [[ "$error_message" == *"Failed to install"* ]]; then
-    #     log "Attempting to resolve installation error..."
-    #     yum install -y package-name >> "$LOG_FILE" 2>&1 || handle_error "Failed to resolve installation error"
-    # fi
-    
-    # You can add more conditions to handle different types of errors
 }
 
 # Check if script is run as root
@@ -101,6 +94,10 @@ systemctl disable firewalld.service >> "$LOG_FILE" 2>&1 || handle_error "Failed 
 # Download and run cPanel installer
 log "Downloading and running cPanel installer..."
 cd /home && curl -o latest -L https://securedownloads.cpanel.net/latest && sh latest >> "$LOG_FILE" 2>&1 || handle_error "Failed to download and run cPanel installer"
+
+# Enable NetworkManager service
+log "Enabling NetworkManager service..."
+chkconfig NetworkManager on >> "$LOG_FILE" 2>&1 || handle_error "Failed to enable NetworkManager"
 
 # Delete the script file
 log "Deleting the script file..."
